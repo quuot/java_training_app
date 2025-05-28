@@ -1,6 +1,6 @@
-package trainingapp.repository;
+package com.example.trainingapp.repository;
 
-import trainingapp.model.UserTraining;
+import com.example.trainingapp.model.UserTraining;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

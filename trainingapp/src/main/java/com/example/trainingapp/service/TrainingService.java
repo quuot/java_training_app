@@ -1,7 +1,7 @@
-package trainingapp.service;
+package com.example.trainingapp.service;
 
-import trainingapp.model.Training;
-import trainingapp.repository.TrainingRepository;
+import com.example.trainingapp.model.Training;
+import com.example.trainingapp.repository.TrainingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

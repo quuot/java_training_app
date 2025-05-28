@@ -1,4 +1,4 @@
-package com.trainingapp.model;
+package com.example.trainingapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "app_user")
 public class User {
 
     @Id
