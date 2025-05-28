@@ -21,6 +21,4 @@ public class Training {
     private String description;
     private LocalDateTime scheduledAt;
 
-    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL)
-    private List<UserTraining> users;
 }
