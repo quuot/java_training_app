@@ -1,0 +1,11 @@
+package trainingapp.repository;
+
+import trainingapp.model.UserTraining;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface UserTrainingRepository extends JpaRepository<UserTraining, Long> {
+    List<UserTraining> findByUserId(Long userId);
+    List<UserTraining> findByTrainingId(Long trainingId);
+}
