@@ -30,7 +30,7 @@ public class UserTrainingControllerTest {
     private UserTrainingService userTrainingService;
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void shouldReturnTrainingsForUser() throws Exception {
         Mockito.when(userTrainingService.getTrainingsForUser(1L))
                 .thenReturn(List.of(new UserTraining()));

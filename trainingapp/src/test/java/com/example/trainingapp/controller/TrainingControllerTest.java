@@ -34,7 +34,7 @@ public class TrainingControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void shouldReturnAllTrainings() throws Exception {
         Mockito.when(trainingService.getAllTrainings()).thenReturn(List.of(new Training()));
         mockMvc.perform(get("/api/trainings"))
@@ -42,7 +42,7 @@ public class TrainingControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void shouldReturnTrainingById() throws Exception {
         Mockito.when(trainingService.getTrainingById(1L)).thenReturn(new Training());
         mockMvc.perform(get("/api/trainings/1"))
@@ -50,7 +50,7 @@ public class TrainingControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void shouldCreateTraining() throws Exception {
         Training training = Training.builder()
                 .name("Cardio")
@@ -64,7 +64,7 @@ public class TrainingControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void shouldDeleteTraining() throws Exception {
         mockMvc.perform(delete("/api/trainings/1"))
                 .andExpect(status().isOk());
