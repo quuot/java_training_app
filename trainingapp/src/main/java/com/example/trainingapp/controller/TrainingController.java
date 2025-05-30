@@ -2,9 +2,11 @@ package com.example.trainingapp.controller;
 
 import com.example.trainingapp.model.Training;
 import com.example.trainingapp.service.TrainingService;
+import com.example.trainingapp.service.UserTrainingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class TrainingController {
 
     private final TrainingService trainingService;
+    private final UserTrainingService userTrainingService;
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -38,4 +41,6 @@ public class TrainingController {
     public Training getTrainingById(@PathVariable Long id) {
         return trainingService.getTrainingById(id);
     }
+
+
 }

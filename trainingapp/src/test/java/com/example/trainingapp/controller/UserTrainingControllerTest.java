@@ -14,6 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+
 
 import java.util.List;
 
@@ -42,4 +45,14 @@ public class UserTrainingControllerTest {
         mockMvc.perform(get("/api/user-trainings/user/1"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldAssignTrainingToUser() throws Exception {
+        mockMvc.perform(post("/api/user-trainings/assign")
+                        .param("userId", "1")
+                        .param("trainingId", "2"))
+                .andExpect(status().isOk());
+    }
+
 }

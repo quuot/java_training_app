@@ -46,4 +46,12 @@ public class UserTrainingController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/assign")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> assignTrainingToUser(@RequestParam Long userId,
+                                                     @RequestParam Long trainingId) {
+        userTrainingService.assignTrainingToUser(userId, trainingId);
+        return ResponseEntity.ok().build();
+    }
+
 }

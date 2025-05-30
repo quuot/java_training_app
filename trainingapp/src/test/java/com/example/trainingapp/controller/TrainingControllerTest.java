@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+import com.example.trainingapp.service.UserTrainingService;
+
 
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class TrainingControllerTest {
 
     @MockBean
     private TrainingService trainingService;
+    @MockBean
+    private UserTrainingService userTrainingService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

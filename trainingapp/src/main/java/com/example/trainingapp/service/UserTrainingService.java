@@ -39,4 +39,18 @@ public class UserTrainingService {
         userTrainingRepository.save(userTraining);
     }
 
+    public void assignTrainingToUser(Long userId, Long trainingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new RuntimeException("Training not found"));
+
+        UserTraining userTraining = new UserTraining();
+        userTraining.setUser(user);
+        userTraining.setTraining(training);
+        userTraining.setCompleted(false); // domyślnie
+        userTrainingRepository.save(userTraining);
+    }
+
 }
