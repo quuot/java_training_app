@@ -2,6 +2,7 @@ package com.example.trainingapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 

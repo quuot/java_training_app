@@ -54,4 +54,28 @@ public class UserTrainingController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/my-trainings-alltime")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<UserTraining>> getMyTrainings(Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        List<UserTraining> trainings = userTrainingService.getTrainingsForUser(user.getId());
+        return ResponseEntity.ok(trainings);
+    }
+
+    @GetMapping("/my-trainings-todo")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<UserTraining>> getMyIncompleteTrainings(Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        List<UserTraining> allTrainings = userTrainingService.getTrainingsForUser(user.getId());
+
+        //completed = false
+        List<UserTraining> incompleteTrainings = allTrainings.stream()
+                .filter(t -> !Boolean.TRUE.equals(t.isCompleted()))
+                .toList();
+
+        return ResponseEntity.ok(incompleteTrainings);
+    }
+
+
+
 }
