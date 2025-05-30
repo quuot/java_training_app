@@ -76,6 +76,16 @@ public class UserTrainingController {
         return ResponseEntity.ok(incompleteTrainings);
     }
 
+    @GetMapping("/my-trainings-completed")
+    @PreAuthorize("hasRole('USER')")
+    public List<UserTraining> getMyCompletedTrainings(Principal principal) {
+        User loggedUser = userService.getUserByUsername(principal.getName());
+
+        return userTrainingService.getTrainingsForUser(loggedUser.getId())
+                .stream()
+                .filter(UserTraining::isCompleted)
+                .toList();
+    }
 
 
 }
