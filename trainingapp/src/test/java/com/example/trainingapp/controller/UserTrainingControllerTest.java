@@ -38,6 +38,9 @@ public class UserTrainingControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private com.example.trainingapp.strategy.TrainingFilterContext trainingFilterContext;
+
     @Test
     @WithMockUser(roles = {"ADMIN"})
     void shouldReturnTrainingsForUser() throws Exception {
@@ -54,58 +57,6 @@ public class UserTrainingControllerTest {
         mockMvc.perform(post("/api/user-trainings/assign")
                         .param("userId", "1")
                         .param("trainingId", "2"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void shouldReturnMyAllTrainings() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testuser");
-        user.setRole(Role.USER);
-
-        Mockito.when(userService.getUserByUsername("testuser")).thenReturn(user);
-        Mockito.when(userTrainingService.getTrainingsForUser(1L))
-                .thenReturn(List.of(new UserTraining()));
-
-        mockMvc.perform(get("/api/user-trainings/my-trainings-alltime"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void shouldReturnMyIncompleteTrainings() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testuser");
-        user.setRole(Role.USER);
-
-        UserTraining training = new UserTraining();
-        training.setCompleted(false);
-
-        Mockito.when(userService.getUserByUsername("testuser")).thenReturn(user);
-        Mockito.when(userTrainingService.getTrainingsForUser(1L)).thenReturn(List.of(training));
-
-        mockMvc.perform(get("/api/user-trainings/my-trainings-todo"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void shouldReturnMyCompletedTrainings() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testuser");
-        user.setRole(Role.USER);
-
-        UserTraining training = new UserTraining();
-        training.setCompleted(true);
-
-        Mockito.when(userService.getUserByUsername("testuser")).thenReturn(user);
-        Mockito.when(userTrainingService.getTrainingsForUser(1L)).thenReturn(List.of(training));
-
-        mockMvc.perform(get("/api/user-trainings/my-trainings-completed"))
                 .andExpect(status().isOk());
     }
 

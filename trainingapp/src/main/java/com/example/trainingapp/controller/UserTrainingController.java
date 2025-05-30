@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
+import com.example.trainingapp.strategy.TrainingFilterContext;
 
 import java.util.List;
 import java.security.Principal;
@@ -19,6 +20,7 @@ public class UserTrainingController {
 
     private final UserTrainingService userTrainingService;
     private final UserService userService;
+    private final TrainingFilterContext trainingFilterContext;
 
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -54,38 +56,20 @@ public class UserTrainingController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/my-trainings-alltime")
+    @GetMapping("/my-trainings")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<UserTraining>> getMyTrainings(Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
-        List<UserTraining> trainings = userTrainingService.getTrainingsForUser(user.getId());
-        return ResponseEntity.ok(trainings);
-    }
+    public ResponseEntity<List<UserTraining>> getMyFilteredTrainings(
+            Principal principal,
+            @RequestParam(defaultValue = "incomplete") String status) {
 
-    @GetMapping("/my-trainings-todo")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<UserTraining>> getMyIncompleteTrainings(Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
         List<UserTraining> allTrainings = userTrainingService.getTrainingsForUser(user.getId());
 
-        //completed = false
-        List<UserTraining> incompleteTrainings = allTrainings.stream()
-                .filter(t -> !Boolean.TRUE.equals(t.isCompleted()))
-                .toList();
-
-        return ResponseEntity.ok(incompleteTrainings);
+        List<UserTraining> filtered = trainingFilterContext.getStrategy(status).filter(allTrainings);
+        return ResponseEntity.ok(filtered);
     }
 
-    @GetMapping("/my-trainings-completed")
-    @PreAuthorize("hasRole('USER')")
-    public List<UserTraining> getMyCompletedTrainings(Principal principal) {
-        User loggedUser = userService.getUserByUsername(principal.getName());
 
-        return userTrainingService.getTrainingsForUser(loggedUser.getId())
-                .stream()
-                .filter(UserTraining::isCompleted)
-                .toList();
-    }
 
 
 }
