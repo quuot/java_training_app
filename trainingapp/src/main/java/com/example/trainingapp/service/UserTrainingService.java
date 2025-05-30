@@ -30,7 +30,7 @@ public class UserTrainingService {
 
     public void completeTraining(Long userId, Long trainingId, boolean completed, String comment) {
         UserTraining userTraining = userTrainingRepository.findByUserIdAndTrainingId(userId, trainingId)
-                .orElseThrow(() -> new RuntimeException("Ten uzytkownik nie ma przypisanego treningu"));
+                .orElseThrow(() -> new RuntimeException("uzytkownik nie ma przypisanego treningu"));
 
         userTraining.setCompleted(completed);
         userTraining.setComment(comment);
@@ -41,10 +41,10 @@ public class UserTrainingService {
 
     public void assignTrainingToUser(Long userId, Long trainingId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono uzytkownika"));
 
         Training training = trainingRepository.findById(trainingId)
-                .orElseThrow(() -> new RuntimeException("Training not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono treningu"));
 
         UserTraining userTraining = new UserTraining();
         userTraining.setUser(user);
