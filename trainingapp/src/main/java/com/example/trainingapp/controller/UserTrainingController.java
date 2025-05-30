@@ -1,12 +1,16 @@
 package com.example.trainingapp.controller;
 
 import com.example.trainingapp.model.UserTraining;
+import com.example.trainingapp.model.User;
+import com.example.trainingapp.service.UserService;
 import com.example.trainingapp.service.UserTrainingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/user-trainings")
@@ -14,10 +18,32 @@ import java.util.List;
 public class UserTrainingController {
 
     private final UserTrainingService userTrainingService;
+    private final UserService userService;
 
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public List<UserTraining> getTrainingsForUser(@PathVariable Long userId) {
         return userTrainingService.getTrainingsForUser(userId);
     }
+
+    @PatchMapping("/complete")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Void> completeTraining(
+            @RequestParam Long userId,
+            @RequestParam Long trainingId,
+            @RequestParam boolean completed,
+            @RequestParam(required = false) String comment,
+            Principal principal) {
+
+        // Pobierz nazwe zalogowanego
+        User loggedUser = userService.getUserByUsername(principal.getName());
+
+        if (!loggedUser.getId().equals(userId) && !loggedUser.getRole().name().equals("ADMIN")) {
+            return ResponseEntity.status(403).build(); //zwroci 403 przy ingerencji w innego usera
+        }
+
+        userTrainingService.completeTraining(userId, trainingId, completed, comment);
+        return ResponseEntity.ok().build();
+    }
+
 }

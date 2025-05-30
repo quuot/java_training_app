@@ -2,6 +2,8 @@ package com.example.trainingapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import java.time.LocalDateTime;
 
@@ -28,5 +30,6 @@ public class UserTraining {
 
     private String comment;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime completedAt;
 }

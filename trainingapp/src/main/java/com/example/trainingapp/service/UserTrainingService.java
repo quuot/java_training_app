@@ -25,4 +25,18 @@ public class UserTrainingService {
     public List<UserTraining> getTrainingsForUser(Long userId) {
         return userTrainingRepository.findByUserId(userId);
     }
+
+    // oznaczenie treingu jako wykonany + komentarz
+
+    public void completeTraining(Long userId, Long trainingId, boolean completed, String comment) {
+        UserTraining userTraining = userTrainingRepository.findByUserIdAndTrainingId(userId, trainingId)
+                .orElseThrow(() -> new RuntimeException("Ten uzytkownik nie ma przypisanego treningu"));
+
+        userTraining.setCompleted(completed);
+        userTraining.setComment(comment);
+        userTraining.setCompletedAt(LocalDateTime.now());
+
+        userTrainingRepository.save(userTraining);
+    }
+
 }

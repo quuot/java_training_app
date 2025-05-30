@@ -2,6 +2,7 @@ package com.example.trainingapp.controller;
 
 import com.example.trainingapp.config.TestSecurityConfig;
 import com.example.trainingapp.model.UserTraining;
+import com.example.trainingapp.service.UserService;
 import com.example.trainingapp.service.UserTrainingService;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ public class UserTrainingControllerTest {
 
     @MockBean
     private UserTrainingService userTrainingService;
+
+    @MockBean
+    private UserService userService;  // <--- Dodane
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
