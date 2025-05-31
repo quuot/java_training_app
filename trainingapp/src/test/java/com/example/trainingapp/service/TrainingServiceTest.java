@@ -2,6 +2,8 @@ package com.example.trainingapp.service;
 
 import com.example.trainingapp.model.Training;
 import com.example.trainingapp.repository.TrainingRepository;
+import com.example.trainingapp.model.trainingtype.TrainingType;
+import com.example.trainingapp.model.trainingtype.TrainingTypeFactory;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -84,5 +86,20 @@ public class TrainingServiceTest {
                 .hasMessage("Nie znaleziono treningu.");
 
         Mockito.verify(trainingRepository).findById(trainingId);
+    }
+
+    @Test
+    void shouldReturnTrainingDescription() {
+        Training training = Training.builder()
+                .id(1L)
+                .name("Cardio Test")
+                .trainingTypeName("cardio")
+                .build();
+
+        Mockito.when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+
+        String description = trainingService.getTrainingDescription(1L);
+
+        assertThat(description).isEqualTo("Trening cardio: ogólne wskazowki dot. treningu");
     }
 }

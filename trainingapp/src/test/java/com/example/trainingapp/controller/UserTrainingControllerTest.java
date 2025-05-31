@@ -6,10 +6,11 @@ import com.example.trainingapp.model.User;
 import com.example.trainingapp.model.UserTraining;
 import com.example.trainingapp.service.UserService;
 import com.example.trainingapp.service.UserTrainingService;
+import com.example.trainingapp.strategy.TrainingFilterContext;
+import com.example.trainingapp.strategy.TrainingFilterStrategy;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,11 +18,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,7 +38,7 @@ public class UserTrainingControllerTest {
     private UserService userService;
 
     @MockBean
-    private com.example.trainingapp.strategy.TrainingFilterContext trainingFilterContext;
+    private TrainingFilterContext trainingFilterContext;
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
@@ -89,9 +88,31 @@ public class UserTrainingControllerTest {
         Mockito.when(userService.getUserByUsername("testuser")).thenReturn(user);
 
         mockMvc.perform(patch("/api/user-trainings/complete")
-                        .param("userId", "999") // inny użytkownik
+                        .param("userId", "999")
                         .param("trainingId", "2")
                         .param("completed", "true"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
+    void shouldReturnFilteredTrainings() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testuser");
+        user.setRole(Role.USER);
+
+        UserTraining training = new UserTraining();
+
+        Mockito.when(userService.getUserByUsername("testuser")).thenReturn(user);
+        Mockito.when(userTrainingService.getTrainingsForUser(1L)).thenReturn(List.of(training));
+
+        TrainingFilterStrategy mockStrategy = Mockito.mock(TrainingFilterStrategy.class);
+        Mockito.when(trainingFilterContext.getStrategy("incomplete")).thenReturn(mockStrategy);
+        Mockito.when(mockStrategy.filter(anyList())).thenReturn(List.of(training));
+
+        mockMvc.perform(get("/api/user-trainings/my-trainings")
+                        .param("status", "incomplete"))
+                .andExpect(status().isOk());
     }
 }
