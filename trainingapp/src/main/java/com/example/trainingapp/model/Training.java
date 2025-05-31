@@ -20,5 +20,7 @@ public class Training {
     private String name;
     private String description;
     private LocalDateTime scheduledAt;
+    private String trainingTypeName;
+
 
 }
