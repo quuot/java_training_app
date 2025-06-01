@@ -197,3 +197,7 @@ GET      /api/user-trainings/my-trainings
 
 ![alt text](image-1.png)
 
+## Baza danych 
+
+### Schemat ERD bazy: 
+![alt text](image-3.png)
