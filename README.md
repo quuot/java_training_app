@@ -201,3 +201,11 @@ GET      /api/user-trainings/my-trainings
 
 ### Schemat ERD bazy: 
 ![alt text](image-3.png)
+
+
+---
+Projekt wykonany jako praca zaliczeniowa na laboratoriach z przedmiotu "Programowanie w języku Java" na studiach informatycznych Politechniki Krakowskiej. 
+
+Autor: **Bartłomiej Kot**
+
+Licencja: **MIT**
